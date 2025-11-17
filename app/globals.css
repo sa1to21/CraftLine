@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* Brand Colors */
+  --color-brand-brown: #4B2E2A;
+  --color-brand-orange: #EA580C;
+  --color-brand-beige: #F5F0E6;
+  --color-brand-text: #1A1A1A;
+  --color-brand-muted: #6B7280;
+
+  /* Stone Colors */
+  --color-stone-50: #fafaf9;
+  --color-stone-100: #f5f5f4;
+  --color-stone-200: #e7e5e4;
+  --color-stone-300: #d6d3d1;
+  --color-stone-400: #a8a29e;
+  --color-stone-500: #78716c;
+  --color-stone-600: #57534e;
+  --color-stone-700: #44403c;
+  --color-stone-800: #292524;
+  --color-stone-900: #1c1917;
+
+  /* Fonts */
+  --font-heading: var(--font-oswald), sans-serif;
+}
+
+/* Pulse Glow Animation for CTA Button */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 0 2px white, 0 0 20px rgba(249, 115, 22, 0.4);
+  }
+  50% {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 0 2px white, 0 0 30px rgba(249, 115, 22, 0.8), 0 0 40px rgba(249, 115, 22, 0.4);
+  }
+}
+
+@keyframes pulse-glow-desktop {
+  0%, 100% {
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4), 0 0 0 3px white, 0 0 25px rgba(249, 115, 22, 0.5);
+  }
+  50% {
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4), 0 0 0 3px white, 0 0 40px rgba(249, 115, 22, 0.9), 0 0 50px rgba(249, 115, 22, 0.5);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-pulse-glow-desktop {
+  animation: pulse-glow-desktop 2s ease-in-out infinite;
+}
+
+body {
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
