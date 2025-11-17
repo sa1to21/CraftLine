@@ -101,22 +101,22 @@ export default function HomePage() {
     {
       title: 'DECK RESTORATION',
       description: 'Professional pressure washing, sanding, staining and sealing as well as board and structural post replacement.',
-      image: 'https://readdy.ai/api/search-image?query=professional%20deck%20restoration%20project%20showing%20craftsman%20applying%20wood%20stain%20with%20brush%20on%20weathered%20wooden%20deck%20boards%2C%20visible%20wood%20grain%20transformation%20from%20gray%20weathered%20to%20rich%20brown%20stained%20finish%2C%20outdoor%20residential%20backyard%20setting%20with%20green%20lawn%20and%20mature%20oak%20trees%2C%20natural%20sunlight%20creating%20warm%20shadows%2C%20authentic%20home%20improvement%20scene%20with%20stain%20containers%20and%20brushes%20visible%20on%20deck%20surface&width=800&height=450&seq=deck-new-2024&orientation=landscape'
+      image: '/s1.jpg'
     },
     {
       title: 'WOODEN PORCH RESTORATION',
       description: 'Expert repairs, sanding and refinishing with paint or stain to restore beauty and durability to your porch.',
-      image: 'https://readdy.ai/api/search-image?query=charming%20restored%20wooden%20front%20porch%20with%20freshly%20painted%20white%20railings%20and%20rich%20mahogany%20stained%20floor%20boards%2C%20elegant%20Victorian%20style%20columns%20and%20balusters%2C%20welcoming%20entrance%20with%20potted%20plants%20and%20outdoor%20furniture%2C%20beautiful%20residential%20home%20exterior%20with%20brick%20foundation%2C%20soft%20morning%20light%20highlighting%20craftsmanship%20details%20and%20smooth%20wood%20finish&width=800&height=450&seq=porch-new-2024&orientation=landscape'
+      image: '/s2.jpg'
     },
     {
       title: 'FENCE REPAIR & STAINING',
       description: 'Post replacement, board repairs, pressure washing and professional staining to extend fence life and curb appeal.',
-      image: 'https://readdy.ai/api/search-image?query=wooden%20privacy%20fence%20restoration%20in%20progress%20showing%20contractor%20replacing%20damaged%20picket%20boards%20with%20new%20cedar%20planks%2C%20half%20of%20fence%20showing%20fresh%20dark%20walnut%20stain%20while%20other%20half%20displays%20weathered%20gray%20wood%2C%20professional%20tools%20including%20hammer%20and%20stain%20brush%20on%20grass%2C%20suburban%20backyard%20with%20flower%20beds%20and%20green%20lawn%2C%20natural%20daylight%20showcasing%20wood%20texture%20contrast&width=800&height=450&seq=fence-new-2024&orientation=landscape'
+      image: '/s3.jpg'
     },
     {
       title: 'PERGOLA INSTALLATION',
       description: 'Custom pergolas and shade structures built with quality craftsmanship to enhance your outdoor living space.',
-      image: 'https://readdy.ai/api/search-image?query=beautiful%20custom%20cedar%20pergola%20structure%20with%20geometric%20beam%20pattern%20creating%20natural%20shade%20over%20stone%20patio%2C%20outdoor%20dining%20set%20underneath%20with%20comfortable%20chairs%20and%20round%20table%2C%20lush%20landscaping%20with%20flowering%20bushes%20and%20ornamental%20grasses%2C%20residential%20backyard%20oasis%20with%20stepping%20stone%20pathway%2C%20golden%20hour%20lighting%20filtering%20through%20pergola%20beams%20creating%20elegant%20shadow%20patterns&width=800&height=450&seq=pergola-new-2024&orientation=landscape'
+      image: '/s4.jpg'
     }
   ];
 
@@ -404,7 +404,7 @@ export default function HomePage() {
         {/* Desktop Hero Background */}
         <div className="hidden md:block absolute inset-0">
           <Image
-            src="https://readdy.ai/api/search-image?query=beautiful%20sunlit%20wooden%20deck%20in%20natural%20light%2C%20inviting%20outdoor%20living%20space%2C%20warm%20wood%20tones%2C%20residential%20backyard%20setting%2C%20lifestyle%20photography%2C%20natural%20atmosphere%2C%20high%20quality%20home%20exterior%2C%20peaceful%20and%20welcoming%20environment&width=1920&height=1080&seq=hero2&orientation=landscape"
+            src="/hero.jpg"
             alt="Beautiful wooden deck"
             fill
             priority
@@ -420,7 +420,7 @@ export default function HomePage() {
           {/* Mobile Hero Background Image with Overlay */}
           <div className="absolute inset-0">
             <Image
-              src="https://readdy.ai/api/search-image?query=beautiful%20sunlit%20wooden%20deck%20in%20natural%20light%2C%20inviting%20outdoor%20living%20space%2C%20warm%20wood%20tones%2C%20residential%20backyard%20setting%2C%20lifestyle%20photography%2C%20natural%20atmosphere%2C%20high%20quality%20home%20exterior%2C%20peaceful%20and%20welcoming%20environment&width=800&height=1200&seq=hero-mobile-2024&orientation=portrait"
+              src="/hero.jpg"
               alt="Beautiful wooden deck"
               fill
               priority
