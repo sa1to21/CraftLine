@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import LazyMap from './LazyMap';
 import {
@@ -17,18 +17,153 @@ import {
   RiMailLine,
   RiCustomerService2Line,
   RiToolsLine,
-  RiHeart3Line
+  RiHeart3Line,
+  RiArrowLeftSLine,
+  RiArrowRightSLine
 } from 'react-icons/ri';
 import { FaYelp, FaGoogle } from 'react-icons/fa';
 
 export default function HomePage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(1); // Desktop: Start at middle duplicate
+  const [mobileImageIndex, setMobileImageIndex] = useState(10); // Mobile: start at first real set (after first duplicate)
+  const [isTransitioning, setIsTransitioning] = useState(true);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
   const [formErrors, setFormErrors] = useState({
     name: '',
     phone: '',
     address: '',
     projectDetails: ''
   });
+
+  // First page: 1, 8, 2, 4, 10
+  // Second page: n1, n2, n4, 3, 9
+  const page1 = [
+    { url: '/1.webp', caption: 'Porch Painting' },
+    { url: '/8.webp', caption: 'Modern Deck Design' },
+    { url: '/2.webp', caption: 'Deck Refinishing' },
+    { url: '/4.webp', caption: 'Deck Painting' },
+    { url: '/10.webp', caption: 'Wood Deck Refinishing' }
+  ];
+
+  const page2 = [
+    { url: '/n1.webp', caption: 'Deck Staining' },
+    { url: '/n2.webp', caption: 'Porch Restoration' },
+    { url: '/n4.webp', caption: 'Fence Staining' },
+    { url: '/3.webp', caption: 'Porch Refresh' },
+    { url: '/9.webp', caption: 'Deck Restoration' }
+  ];
+
+  // Combined array for mobile
+  const allImages = [...page1, ...page2];
+
+  useEffect(() => {
+    if (!isTransitioning) return;
+
+    const timer = setTimeout(() => {
+      setIsTransitioning(false);
+    }, 500); // Match transition duration
+
+    return () => clearTimeout(timer);
+  }, [isTransitioning]);
+
+  useEffect(() => {
+    if (isTransitioning) return;
+
+    // After transition ends, reset position if needed for infinite loop
+    // Structure: page1, page2, page1
+    // Start at slide 1 (first page1), showing slides 0, 1, 2
+    if (currentSlide === 0) {
+      // Went backwards from first page1 to last page1
+      setCurrentSlide(2);
+    } else if (currentSlide === 3) {
+      // Went forwards from last page1 to first page1
+      setCurrentSlide(1);
+    }
+  }, [currentSlide, isTransitioning]);
+
+  useEffect(() => {
+    if (isTransitioning) return;
+
+    // Mobile: infinite loop through all images
+    // Structure: [...allImages, ...allImages, ...allImages] = 30 total
+    // Real images at index 10-19, duplicates at 0-9 and 20-29
+    if (mobileImageIndex < 10) {
+      // Went backwards past first real set, jump to last set
+      setMobileImageIndex(mobileImageIndex + 10);
+    } else if (mobileImageIndex >= 20) {
+      // Went forwards past last real set, jump to first set
+      setMobileImageIndex(mobileImageIndex - 10);
+    }
+  }, [mobileImageIndex, isTransitioning]);
+
+  const handlePrev = () => {
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+
+    // Check if mobile (window width < 768px)
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      setMobileImageIndex(prev => prev - 1);
+    } else {
+      setCurrentSlide(prev => prev - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+
+    // Check if mobile (window width < 768px)
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      setMobileImageIndex(prev => prev + 1);
+    } else {
+      setCurrentSlide(prev => prev + 1);
+    }
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe) {
+      handleNext();
+    }
+    if (isRightSwipe) {
+      handlePrev();
+    }
+
+    setTouchStart(0);
+    setTouchEnd(0);
+  };
+
+  const getActualSlide = () => {
+    // Structure: [page1], [page2], [page1]
+    // Slide 0 or 2 = page1 (dot 0)
+    // Slide 1 = page2 (dot 1)
+    if (currentSlide === 1) return 0; // Showing actual page1
+    if (currentSlide === 2) return 1; // Showing page2
+    return 0; // currentSlide 0 or 3 during transition
+  };
+
+  const getMobileImageIndex = () => {
+    // For mobile: track individual images within current page
+    // Total images: page1 (5) + page2 (5) = 10
+    if (currentSlide === 1) return 0; // page1 starts at 0
+    if (currentSlide === 2) return 5; // page2 starts at 5
+    return 0;
+  };
 
   const scrollToSection = (sectionId: string) => {
     const section = document.getElementById(sectionId);
@@ -100,7 +235,7 @@ export default function HomePage() {
 
   const services = [
     {
-      title: 'DECK RESTORATION',
+      title: 'DECK BUILD AND RESTORATION',
       description: 'Professional pressure washing, sanding, staining and sealing as well as board and structural post replacement.',
       image: '/s1.webp'
     },
@@ -203,19 +338,41 @@ export default function HomePage() {
             </button>
 
             {/* Mobile Actions */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
+              {/* Social Icons */}
               <a
-                href="tel:9168414316"
-                className="flex items-center justify-center w-10 h-10 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-all duration-300 transform hover:scale-105"
+                href="https://www.instagram.com/craftline.sacramento?igsh=NTc4MTIwNjQ2YQ=="
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-brand-brown hover:text-brand-orange cursor-pointer transition-all duration-300 transform hover:scale-110"
               >
-                <RiPhoneFill className="text-lg" />
+                <RiInstagramLine className="text-3xl" />
               </a>
 
+              <a
+                href="https://yelp.to/1YJwTMiSXR"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-brand-brown hover:text-brand-orange cursor-pointer transition-all duration-300 transform hover:scale-110"
+              >
+                <FaYelp className="text-3xl" />
+              </a>
+
+              <a
+                href="https://maps.app.goo.gl/x312YhivPyDcfheA8?g_st=iwb"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-brand-brown hover:text-brand-orange cursor-pointer transition-all duration-300 transform hover:scale-110"
+              >
+                <FaGoogle className="text-2xl" />
+              </a>
+
+              {/* Menu Button */}
               <button
                 onClick={toggleMobileMenu}
                 className="flex items-center justify-center w-10 h-10 text-brand-brown hover:text-brand-orange transition-colors cursor-pointer"
               >
-                {isMobileMenuOpen ? <RiCloseLine className="text-2xl" /> : <RiMenuLine className="text-2xl" />}
+                {isMobileMenuOpen ? <RiCloseLine className="text-3xl" /> : <RiMenuLine className="text-3xl" />}
               </button>
             </div>
           </div>
@@ -264,14 +421,42 @@ export default function HomePage() {
 
             {/* Right Side Group - Right Column */}
             <div className="flex items-center gap-3 xl:gap-4 justify-end">
-              {/* Phone Number */}
+              {/* Social Icons - First */}
+              <div className="flex items-center gap-3">
+                <a
+                  href="https://www.instagram.com/craftline.sacramento?igsh=NTc4MTIwNjQ2YQ=="
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-brand-brown hover:text-brand-orange cursor-pointer transition-all duration-300 transform hover:scale-110"
+                >
+                  <RiInstagramLine className="text-2xl xl:text-3xl" />
+                </a>
+
+                <a
+                  href="https://yelp.to/1YJwTMiSXR"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-brand-brown hover:text-brand-orange cursor-pointer transition-all duration-300 transform hover:scale-110"
+                >
+                  <FaYelp className="text-2xl xl:text-3xl" />
+                </a>
+
+                <a
+                  href="https://maps.app.goo.gl/x312YhivPyDcfheA8?g_st=iwb"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-brand-brown hover:text-brand-orange cursor-pointer transition-all duration-300 transform hover:scale-110"
+                >
+                  <FaGoogle className="text-xl xl:text-2xl" />
+                </a>
+              </div>
+
+              {/* Phone Icon */}
               <a
                 href="tel:9168414316"
-                className="flex items-center gap-1.5 text-brand-brown hover:text-brand-orange cursor-pointer transition-all duration-300 font-semibold text-sm xl:text-base whitespace-nowrap transform hover:scale-105"
+                className="text-brand-brown hover:text-brand-orange cursor-pointer transition-all duration-300 transform hover:scale-110"
               >
-                <RiPhoneFill className="text-lg xl:text-xl" />
-                <span className="hidden xl:inline">(916) 841-4316</span>
-                <span className="xl:hidden">Call</span>
+                <RiPhoneFill className="text-2xl xl:text-3xl" />
               </a>
 
               {/* CTA Button */}
@@ -281,36 +466,6 @@ export default function HomePage() {
               >
                 FREE ESTIMATE
               </button>
-
-              {/* Social Icons */}
-              <div className="flex items-center gap-2 xl:gap-3 pl-3 xl:pl-4 border-l-2 border-gray-300">
-                <a
-                  href="https://www.instagram.com/craftline.sacramento?igsh=NTc4MTIwNjQ2YQ=="
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-brand-brown hover:text-brand-orange cursor-pointer transition-all duration-300 transform hover:scale-105"
-                >
-                  <RiInstagramLine className="text-xl xl:text-2xl" />
-                </a>
-
-                <a
-                  href="https://yelp.to/1YJwTMiSXR"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-brand-brown hover:text-brand-orange cursor-pointer transition-all duration-300 transform hover:scale-105"
-                >
-                  <FaYelp className="text-xl xl:text-2xl" />
-                </a>
-
-                <a
-                  href="https://maps.app.goo.gl/x312YhivPyDcfheA8?g_st=iwb"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-brand-brown hover:text-brand-orange cursor-pointer transition-all duration-300 transform hover:scale-105"
-                >
-                  <FaGoogle className="text-lg xl:text-xl" />
-                </a>
-              </div>
             </div>
           </div>
 
@@ -361,36 +516,6 @@ export default function HomePage() {
                 >
                   FREE ESTIMATE
                 </button>
-
-                {/* Mobile Social Icons */}
-                <div className="flex items-center justify-center gap-6 pt-4 border-t border-gray-200 mt-2">
-                  <a
-                    href="https://www.instagram.com/craftline.sacramento?igsh=NTc4MTIwNjQ2YQ=="
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-brand-brown hover:text-brand-orange transition-all duration-300 transform hover:scale-105"
-                  >
-                    <RiInstagramLine className="text-3xl" />
-                  </a>
-
-                  <a
-                    href="https://yelp.to/1YJwTMiSXR"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-brand-brown hover:text-brand-orange transition-all duration-300 transform hover:scale-105"
-                  >
-                    <FaYelp className="text-3xl" />
-                  </a>
-
-                  <a
-                    href="https://maps.app.goo.gl/x312YhivPyDcfheA8?g_st=iwb"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-brand-brown hover:text-brand-orange transition-all duration-300 transform hover:scale-105"
-                  >
-                    <FaGoogle className="text-2xl" />
-                  </a>
-                </div>
               </nav>
             </div>
           )}
@@ -421,7 +546,7 @@ export default function HomePage() {
           {/* Mobile Hero Background Image with Overlay */}
           <div className="absolute inset-0">
             <Image
-              src="/hero.webp"
+              src="/mobilebg.webp"
               alt="Beautiful wooden deck"
               fill
               priority
@@ -581,31 +706,105 @@ export default function HomePage() {
 
       {/* Project Gallery */}
       <section id="recent-projects" className="py-20 bg-gradient-to-br from-brand-beige to-white">
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-[1600px] mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-bold text-brand-brown mb-4 font-heading tracking-wide uppercase">RECENT PROJECTS</h2>
             <p className="text-xl text-brand-muted mb-8">Bringing outdoor spaces back to life across Sacramento</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { url: '/1.webp', caption: 'Deck Staining' },
-              { url: '/2.webp', caption: 'Fence Refinish' },
-              { url: '/3.webp', caption: 'Porch Refresh' },
-              { url: '/4.webp', caption: 'Pergola Install' }
-            ].map((item, index) => (
-              <div key={index} className="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500">
-                <div className="aspect-[3/4] overflow-hidden bg-gray-100 relative">
-                  <Image
-                    src={item.url}
-                    alt={item.caption}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                    className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
-                  />
-                </div>
+          {/* Carousel Container */}
+          <div className="relative overflow-hidden">
+            {/* Mobile Carousel - Individual Images */}
+            <div className="md:hidden">
+              <div
+                className={`flex mb-8 ${isTransitioning ? 'transition-transform duration-500 ease-out' : ''}`}
+                style={{ transform: `translateX(-${mobileImageIndex * 100}%)` }}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+              >
+                {/* Infinite loop: allImages x3 for smooth transitions */}
+                {[...allImages, ...allImages, ...allImages].map((item, index) => (
+                  <div key={index} className="min-w-[100%] px-3 flex-shrink-0">
+                    <div className="group relative overflow-hidden rounded-xl shadow-lg">
+                      <div className="aspect-[3/4] overflow-hidden bg-gray-100 relative">
+                        <Image
+                          src={item.url}
+                          alt={item.caption}
+                          fill
+                          sizes="100vw"
+                          className="object-cover"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
+
+            {/* Desktop Carousel - Pages */}
+            <div className="hidden md:block">
+              <div
+                className={`flex mb-8 ${isTransitioning ? 'transition-transform duration-500 ease-out' : ''}`}
+                style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+              >
+                {/* Infinite loop: page1, page2, page1, page2 */}
+                {[...page1, ...page2, ...page1, ...page2].map((item, index) => (
+                  <div key={index} className="min-w-[50%] lg:min-w-[20%] px-3 flex-shrink-0">
+                    <div className="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500">
+                      <div className="aspect-[3/4] overflow-hidden bg-gray-100 relative">
+                        <Image
+                          src={item.url}
+                          alt={item.caption}
+                          fill
+                          sizes="(max-width: 1024px) 50vw, 20vw"
+                          className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Navigation Controls Below */}
+            <div className="flex justify-center items-center gap-4">
+              <button
+                onClick={handlePrev}
+                className="bg-white/90 hover:bg-white p-3 rounded-full transition-all"
+                aria-label="Previous"
+              >
+                <RiArrowLeftSLine className="text-2xl text-brand-brown" />
+              </button>
+
+              {/* Desktop: Dots indicator */}
+              <div className="hidden md:flex gap-2">
+                {[0, 1].map((index) => (
+                  <button
+                    key={index}
+                    onClick={() => {
+                      if (!isTransitioning) {
+                        setIsTransitioning(true);
+                        // index 0 = page1 (slide 1), index 1 = page2 (slide 2)
+                        setCurrentSlide(index === 0 ? 1 : 2);
+                      }
+                    }}
+                    className={`w-3 h-3 rounded-full transition-all ${
+                      getActualSlide() === index ? 'bg-brand-brown w-8' : 'bg-brand-brown/30'
+                    }`}
+                    aria-label={`Go to slide ${index + 1}`}
+                  />
+                ))}
+              </div>
+
+              <button
+                onClick={handleNext}
+                className="bg-white/90 hover:bg-white p-3 rounded-full transition-all"
+                aria-label="Next"
+              >
+                <RiArrowRightSLine className="text-2xl text-brand-brown" />
+              </button>
+            </div>
           </div>
 
           {/* CTA Section */}
@@ -671,7 +870,7 @@ export default function HomePage() {
               onClick={() => scrollToSection('contact')}
               className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-10 py-4 rounded-lg text-xl font-bold transition-all duration-300 shadow-xl hover:shadow-2xl cursor-pointer whitespace-nowrap uppercase tracking-wide transform hover:scale-105"
             >
-              GET YOUR FREE ESTIMATE
+              REQUEST A QUOTE
             </button>
           </div>
         </div>

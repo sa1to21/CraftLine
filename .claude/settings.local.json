@@ -14,7 +14,19 @@
       "Bash(npm uninstall:*)",
       "Bash(git init:*)",
       "Bash(git remote add:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git config:*)",
+      "Bash(git branch:*)",
+      "Bash(git push:*)",
+      "Bash(dir:*)",
+      "Bash(node:*)",
+      "Bash(git log:*)",
+      "Bash(git checkout:*)",
+      "Bash(git revert:*)",
+      "Bash(magick:*)",
+      "Bash(del mobilebg.jpg n1.jpg n2.jpg n4.jpg)",
+      "Bash(del:*)"
     ],
     "deny": [],
     "ask": []
