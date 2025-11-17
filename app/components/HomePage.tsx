@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import LazyMap from './LazyMap';
 import {
   RiPhoneFill,
   RiMenuLine,
@@ -715,13 +716,13 @@ export default function HomePage() {
             {/* Mobile Map */}
             <div className="relative">
               <div className="bg-stone-100 rounded-xl overflow-hidden shadow-lg" style={{ height: '300px' }}>
-                <iframe
+                <LazyMap
                   src="https://www.google.com/maps/d/u/1/embed?mid=1sKue0irsW_qsvQ_nO9BTz1z-DqdNmsg&ehbc=2E312F&noprof=1&ll=38.68,-121.35&z=9&hl=en"
                   width="640"
                   height="360"
                   className="w-full"
                   style={{ border: 0, marginTop: '-60px' }}
-                ></iframe>
+                />
               </div>
             </div>
             
@@ -790,13 +791,13 @@ export default function HomePage() {
             {/* Map */}
             <div className="relative order-1 h-full">
               <div className="bg-stone-100 rounded-xl overflow-hidden shadow-lg h-full">
-                <iframe
+                <LazyMap
                   src="https://www.google.com/maps/d/u/1/embed?mid=1sKue0irsW_qsvQ_nO9BTz1z-DqdNmsg&ehbc=2E312F&noprof=1&ll=38.68,-121.35&z=10&hl=en"
                   width="640"
                   height="480"
                   className="w-full"
                   style={{ border: 0, height: 'calc(100% + 60px)', marginTop: '-60px' }}
-                ></iframe>
+                />
               </div>
             </div>
           </div>
