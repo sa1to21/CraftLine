@@ -101,22 +101,22 @@ export default function HomePage() {
     {
       title: 'DECK RESTORATION',
       description: 'Professional pressure washing, sanding, staining and sealing as well as board and structural post replacement.',
-      image: '/s1.jpg'
+      image: '/s1.webp'
     },
     {
       title: 'WOODEN PORCH RESTORATION',
       description: 'Expert repairs, sanding and refinishing with paint or stain to restore beauty and durability to your porch.',
-      image: '/s2.jpg'
+      image: '/s2.webp'
     },
     {
       title: 'FENCE REPAIR & STAINING',
       description: 'Post replacement, board repairs, pressure washing and professional staining to extend fence life and curb appeal.',
-      image: '/s3.jpg'
+      image: '/s3.webp'
     },
     {
       title: 'PERGOLA INSTALLATION',
       description: 'Custom pergolas and shade structures built with quality craftsmanship to enhance your outdoor living space.',
-      image: '/s4.jpg'
+      image: '/s4.webp'
     }
   ];
 
@@ -404,7 +404,7 @@ export default function HomePage() {
         {/* Desktop Hero Background */}
         <div className="hidden md:block absolute inset-0">
           <Image
-            src="/hero.jpg"
+            src="/hero.webp"
             alt="Beautiful wooden deck"
             fill
             priority
@@ -420,7 +420,7 @@ export default function HomePage() {
           {/* Mobile Hero Background Image with Overlay */}
           <div className="absolute inset-0">
             <Image
-              src="/hero.jpg"
+              src="/hero.webp"
               alt="Beautiful wooden deck"
               fill
               priority
@@ -588,10 +588,10 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { url: '/1.jpg', caption: 'Deck Staining' },
-              { url: '/2.jpg', caption: 'Fence Refinish' },
-              { url: '/3.jpg', caption: 'Porch Refresh' },
-              { url: '/4.jpg', caption: 'Pergola Install' }
+              { url: '/1.webp', caption: 'Deck Staining' },
+              { url: '/2.webp', caption: 'Fence Refinish' },
+              { url: '/3.webp', caption: 'Porch Refresh' },
+              { url: '/4.webp', caption: 'Pergola Install' }
             ].map((item, index) => (
               <div key={index} className="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500">
                 <div className="aspect-[3/4] overflow-hidden bg-gray-100 relative">
