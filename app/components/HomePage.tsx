@@ -204,13 +204,6 @@ export default function HomePage() {
 
             {/* Mobile Actions */}
             <div className="flex items-center gap-2">
-              <a
-                href="tel:9168414316"
-                className="flex items-center justify-center w-10 h-10 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-all duration-300 transform hover:scale-105"
-              >
-                <RiPhoneFill className="text-lg" />
-              </a>
-
               <button
                 onClick={toggleMobileMenu}
                 className="flex items-center justify-center w-10 h-10 text-brand-brown hover:text-brand-orange transition-colors cursor-pointer"
