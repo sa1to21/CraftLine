@@ -922,9 +922,9 @@ export default function HomePage() {
                 <LazyMap
                   src="https://www.google.com/maps/d/u/1/embed?mid=1sKue0irsW_qsvQ_nO9BTz1z-DqdNmsg&ehbc=2E312F&noprof=1&ll=38.68,-121.35&z=9&hl=en"
                   width="640"
-                  height="360"
-                  className="w-full"
-                  style={{ border: 0, marginTop: '-60px' }}
+                  height="300"
+                  className="w-full h-full"
+                  style={{ border: 0 }}
                 />
               </div>
             </div>
