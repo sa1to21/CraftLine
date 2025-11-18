@@ -1158,11 +1158,10 @@ export default function HomePage() {
               </div>
               
               <div>
-                <label className="block text-brand-brown font-semibold mb-2 uppercase tracking-wide">Project Details*</label>
+                <label className="block text-brand-brown font-semibold mb-2 uppercase tracking-wide">Project Details</label>
                 <textarea
                   name="projectDetails"
                   rows={5}
-                  required
                   minLength={10}
                   maxLength={2000}
                   title="Please provide project details (minimum 10 characters, maximum 2000)"
