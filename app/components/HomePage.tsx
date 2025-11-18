@@ -37,13 +37,13 @@ export default function HomePage() {
     projectDetails: ''
   });
 
-  // First page: 1, 8, 2, 4, 10
+  // First page: n5, 8, n6, n7, 10
   // Second page: n1, n2, n4, 3, 9
   const page1 = [
-    { url: '/1.webp', caption: 'Porch Painting' },
+    { url: '/n5.webp', caption: 'Porch Painting' },
     { url: '/8.webp', caption: 'Modern Deck Design' },
-    { url: '/2.webp', caption: 'Deck Refinishing' },
-    { url: '/4.webp', caption: 'Deck Painting' },
+    { url: '/n6.webp', caption: 'Deck Refinishing' },
+    { url: '/n7.webp', caption: 'Deck Painting' },
     { url: '/10.webp', caption: 'Wood Deck Refinishing' }
   ];
 
