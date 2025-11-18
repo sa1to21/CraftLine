@@ -727,13 +727,15 @@ export default function HomePage() {
                 {[...allImages, ...allImages, ...allImages].map((item, index) => (
                   <div key={index} className="min-w-[100%] px-3 flex-shrink-0">
                     <div className="group relative overflow-hidden rounded-xl shadow-lg">
-                      <div className="aspect-[3/4] overflow-hidden bg-gray-100 relative">
+                      <div className="aspect-[3/4] overflow-hidden bg-stone-200 relative">
                         <Image
                           src={item.url}
                           alt={item.caption}
                           fill
                           sizes="100vw"
                           className="object-cover"
+                          priority={index >= 10 && index < 11}
+                          loading={index >= 10 && index < 11 ? undefined : "lazy"}
                         />
                       </div>
                     </div>
@@ -752,13 +754,15 @@ export default function HomePage() {
                 {[...page1, ...page2, ...page1, ...page2].map((item, index) => (
                   <div key={index} className="min-w-[50%] lg:min-w-[20%] px-3 flex-shrink-0">
                     <div className="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500">
-                      <div className="aspect-[3/4] overflow-hidden bg-gray-100 relative">
+                      <div className="aspect-[3/4] overflow-hidden bg-stone-200 relative">
                         <Image
                           src={item.url}
                           alt={item.caption}
                           fill
                           sizes="(max-width: 1024px) 50vw, 20vw"
                           className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                          priority={index >= 5 && index < 10}
+                          loading={index >= 5 && index < 10 ? undefined : "lazy"}
                         />
                       </div>
                     </div>
