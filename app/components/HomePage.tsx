@@ -933,7 +933,7 @@ export default function HomePage() {
                   width="640"
                   height="360"
                   className="w-full"
-                  style={{ border: 0, height: 'calc(100% + 37px)', marginTop: '-55px' }}
+                  style={{ border: 0, height: 'calc(100% + 42px)', marginTop: '-60px' }}
                 />
               </div>
             </div>
@@ -1008,7 +1008,7 @@ export default function HomePage() {
                   width="640"
                   height="480"
                   className="w-full"
-                  style={{ border: 0, height: 'calc(100% + 37px)', marginTop: '-55px' }}
+                  style={{ border: 0, height: 'calc(100% + 42px)', marginTop: '-60px' }}
                 />
               </div>
             </div>
