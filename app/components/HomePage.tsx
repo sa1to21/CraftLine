@@ -876,7 +876,7 @@ export default function HomePage() {
 
           {/* CTA Section */}
           <div className="mt-16 flex flex-col items-center gap-4">
-            <p className="text-lg text-brand-brown font-semibold italic">
+            <p className="text-lg text-brand-brown font-semibold italic text-center">
               Ready to bring new life to your outdoor wood?
             </p>
             <button
