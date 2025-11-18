@@ -24,7 +24,7 @@ export default function LazyMap({ src, width = "640", height = "480", className 
         });
       },
       {
-        rootMargin: '1000px', // Start loading 1000px before the map is visible
+        rootMargin: '2000px', // Start loading 2000px before the map is visible
       }
     );
 
@@ -42,24 +42,15 @@ export default function LazyMap({ src, width = "640", height = "480", className 
 
   return (
     <div ref={iframeRef} className={className} style={style}>
-      {isLoaded ? (
-        <iframe
-          src={src}
-          width={width}
-          height={height}
-          className="w-full h-full"
-          style={{ border: 0, ...style }}
-          loading="lazy"
-          title="Service Area Map"
-        />
-      ) : (
-        <div className="w-full h-full flex items-center justify-center bg-stone-200 rounded-xl">
-          <div className="text-center">
-            <div className="inline-block w-12 h-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-3"></div>
-            <p className="text-brand-muted font-medium">Loading map...</p>
-          </div>
-        </div>
-      )}
+      <iframe
+        src={isLoaded ? src : 'about:blank'}
+        width={width}
+        height={height}
+        className="w-full h-full"
+        style={{ border: 0, ...style }}
+        loading="lazy"
+        title="Service Area Map"
+      />
     </div>
   );
 }
