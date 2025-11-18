@@ -41,6 +41,16 @@ export default function LazyMap({ src, width = "640", height = "480", className 
     };
   }, [isLoaded]);
 
+  // Fallback: show iframe after 2 seconds even if onLoad doesn't fire
+  useEffect(() => {
+    if (isLoaded && !iframeReady) {
+      const timer = setTimeout(() => {
+        setIframeReady(true);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [isLoaded, iframeReady]);
+
   return (
     <div ref={iframeRef} className={className} style={style}>
       <div className="relative w-full h-full">
