@@ -24,7 +24,7 @@ export default function LazyMap({ src, width = "640", height = "480", className 
         });
       },
       {
-        rootMargin: '500px', // Start loading 500px before the map is visible
+        rootMargin: '1000px', // Start loading 1000px before the map is visible
       }
     );
 
