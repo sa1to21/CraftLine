@@ -12,20 +12,19 @@ interface LazyMapProps {
 
 export default function LazyMap({ src, width = "640", height = "480", className = "", style = {} }: LazyMapProps) {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [iframeReady, setIframeReady] = useState(false);
   const iframeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting && !isLoaded) {
+          if (entry.isIntersecting) {
             setIsLoaded(true);
           }
         });
       },
       {
-        rootMargin: '1000px', // Start loading 1000px before the map is visible
+        rootMargin: '500px', // Start loading 500px before the map is visible
       }
     );
 
@@ -39,49 +38,28 @@ export default function LazyMap({ src, width = "640", height = "480", className 
         observer.unobserve(currentRef);
       }
     };
-  }, [isLoaded]);
-
-  // Fallback: show iframe after 2 seconds even if onLoad doesn't fire
-  useEffect(() => {
-    if (isLoaded && !iframeReady) {
-      const timer = setTimeout(() => {
-        setIframeReady(true);
-      }, 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [isLoaded, iframeReady]);
+  }, []);
 
   return (
     <div ref={iframeRef} className={className} style={style}>
-      <div className="relative w-full h-full">
-        {/* Placeholder - fades out when iframe is ready */}
-        <div
-          className={`absolute inset-0 flex items-center justify-center bg-stone-200 rounded-xl transition-opacity duration-500 ${
-            iframeReady ? 'opacity-0 pointer-events-none' : 'opacity-100'
-          }`}
-        >
+      {isLoaded ? (
+        <iframe
+          src={src}
+          width={width}
+          height={height}
+          className="w-full h-full"
+          style={{ border: 0, ...style }}
+          loading="lazy"
+          title="Service Area Map"
+        />
+      ) : (
+        <div className="w-full h-full flex items-center justify-center bg-stone-200 rounded-xl">
           <div className="text-center">
             <div className="inline-block w-12 h-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-3"></div>
             <p className="text-brand-muted font-medium">Loading map...</p>
           </div>
         </div>
-
-        {/* Iframe - fades in when loaded */}
-        {isLoaded && (
-          <iframe
-            src={src}
-            width={width}
-            height={height}
-            className={`w-full h-full transition-opacity duration-500 ${
-              iframeReady ? 'opacity-100' : 'opacity-0'
-            }`}
-            style={{ border: 0, ...style }}
-            loading="lazy"
-            title="Service Area Map"
-            onLoad={() => setIframeReady(true)}
-          />
-        )}
-      </div>
+      )}
     </div>
   );
 }
