@@ -924,7 +924,7 @@ export default function HomePage() {
                   width="640"
                   height="360"
                   className="w-full"
-                  style={{ border: 0, height: 'calc(100% + 40px)', marginTop: '-40px' }}
+                  style={{ border: 0, height: 'calc(100% + 32px)', marginTop: '-50px' }}
                 />
               </div>
             </div>
@@ -999,7 +999,7 @@ export default function HomePage() {
                   width="640"
                   height="480"
                   className="w-full"
-                  style={{ border: 0, height: 'calc(100% + 40px)', marginTop: '-40px' }}
+                  style={{ border: 0, height: 'calc(100% + 32px)', marginTop: '-50px' }}
                 />
               </div>
             </div>
