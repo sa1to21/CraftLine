@@ -43,12 +43,13 @@ export default function LazyMap({ src, width = "640", height = "480", className 
 
   return (
     <div ref={iframeRef} className={className} style={style}>
-      <div className="relative w-full h-full">
+      <div className="relative w-full" style={{ minHeight: height }}>
         {/* Placeholder - fades out when iframe is ready */}
         <div
           className={`absolute inset-0 flex items-center justify-center bg-stone-200 rounded-xl transition-opacity duration-500 ${
             iframeReady ? 'opacity-0 pointer-events-none' : 'opacity-100'
           }`}
+          style={{ minHeight: height }}
         >
           <div className="text-center">
             <div className="inline-block w-12 h-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-3"></div>
@@ -65,7 +66,7 @@ export default function LazyMap({ src, width = "640", height = "480", className 
             className={`w-full transition-opacity duration-500 ${
               iframeReady ? 'opacity-100' : 'opacity-0'
             }`}
-            style={{ border: 0, ...style }}
+            style={{ border: 0, minHeight: height, ...style }}
             loading="lazy"
             title="Service Area Map"
             onLoad={() => setIframeReady(true)}
