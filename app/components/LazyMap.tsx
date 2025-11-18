@@ -29,13 +29,14 @@ export default function LazyMap({ src, width = "640", height = "480", className 
       }
     );
 
-    if (iframeRef.current) {
-      observer.observe(iframeRef.current);
+    const currentRef = iframeRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (iframeRef.current) {
-        observer.unobserve(iframeRef.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, [isLoaded]);
