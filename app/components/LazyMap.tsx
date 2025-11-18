@@ -1,7 +1,5 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-
 interface LazyMapProps {
   src: string;
   width?: string | number;
@@ -11,39 +9,10 @@ interface LazyMapProps {
 }
 
 export default function LazyMap({ src, width = "640", height = "480", className = "", style = {} }: LazyMapProps) {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const iframeRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsLoaded(true);
-          }
-        });
-      },
-      {
-        rootMargin: '2000px', // Start loading 2000px before the map is visible
-      }
-    );
-
-    const currentRef = iframeRef.current;
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
-
-    return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
-    };
-  }, []);
-
   return (
-    <div ref={iframeRef} className={className} style={style}>
+    <div className={className} style={style}>
       <iframe
-        src={isLoaded ? src : 'about:blank'}
+        src={src}
         width={width}
         height={height}
         className="w-full h-full"
