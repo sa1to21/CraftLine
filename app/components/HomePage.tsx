@@ -724,23 +724,27 @@ export default function HomePage() {
                 onTouchEnd={handleTouchEnd}
               >
                 {/* Infinite loop: allImages x3 for smooth transitions */}
-                {[...allImages, ...allImages, ...allImages].map((item, index) => (
-                  <div key={index} className="min-w-[100%] px-3 flex-shrink-0">
-                    <div className="group relative overflow-hidden rounded-xl shadow-lg">
-                      <div className="aspect-[3/4] overflow-hidden bg-stone-200 relative">
-                        <Image
-                          src={item.url}
-                          alt={item.caption}
-                          fill
-                          sizes="100vw"
-                          className="object-cover"
-                          priority={index >= 10 && index < 11}
-                          loading={index >= 10 && index < 11 ? undefined : "lazy"}
-                        />
+                {[...allImages, ...allImages, ...allImages].map((item, index) => {
+                  // Preload current image and 2 neighbors (previous and next)
+                  const isNearCurrent = Math.abs(index - mobileImageIndex) <= 1;
+                  return (
+                    <div key={index} className="min-w-[100%] px-3 flex-shrink-0">
+                      <div className="group relative overflow-hidden rounded-xl shadow-lg">
+                        <div className="aspect-[3/4] overflow-hidden bg-stone-200 relative">
+                          <Image
+                            src={item.url}
+                            alt={item.caption}
+                            fill
+                            sizes="100vw"
+                            className="object-cover"
+                            priority={isNearCurrent}
+                            loading={isNearCurrent ? "eager" : "lazy"}
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
 
@@ -751,23 +755,28 @@ export default function HomePage() {
                 style={{ transform: `translateX(-${currentSlide * 100}%)` }}
               >
                 {/* Infinite loop: page1, page2, page1, page2 */}
-                {[...page1, ...page2, ...page1, ...page2].map((item, index) => (
-                  <div key={index} className="min-w-[50%] lg:min-w-[20%] px-3 flex-shrink-0">
-                    <div className="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500">
-                      <div className="aspect-[3/4] overflow-hidden bg-stone-200 relative">
-                        <Image
-                          src={item.url}
-                          alt={item.caption}
-                          fill
-                          sizes="(max-width: 1024px) 50vw, 20vw"
-                          className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
-                          priority={index >= 5 && index < 10}
-                          loading={index >= 5 && index < 10 ? undefined : "lazy"}
-                        />
+                {[...page1, ...page2, ...page1, ...page2].map((item, index) => {
+                  // Desktop shows 5 images at once (20% each), preload visible + next page
+                  const startIndex = currentSlide * 5;
+                  const isVisible = index >= startIndex && index < startIndex + 10;
+                  return (
+                    <div key={index} className="min-w-[50%] lg:min-w-[20%] px-3 flex-shrink-0">
+                      <div className="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500">
+                        <div className="aspect-[3/4] overflow-hidden bg-stone-200 relative">
+                          <Image
+                            src={item.url}
+                            alt={item.caption}
+                            fill
+                            sizes="(max-width: 1024px) 50vw, 20vw"
+                            className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                            priority={isVisible}
+                            loading={isVisible ? "eager" : "lazy"}
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
 
